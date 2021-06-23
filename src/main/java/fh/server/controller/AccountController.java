@@ -84,5 +84,22 @@ public class AccountController {
         return null;
     }
 
+    /**
+     * TODO
+     * @param name
+     * @param password
+     * @return
+     */
+    @GetMapping("/account/login")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public AccountDTO loginAccount(
+            @RequestHeader("name") String name,
+            @RequestHeader("password") String password
+    ) {
+        // TODO
+        return null;
+    }
+
 
 }

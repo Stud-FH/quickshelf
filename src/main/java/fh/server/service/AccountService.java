@@ -18,12 +18,28 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
+    public Account verifyAccount(Long id, String token) {
+        // TODO
+        return null;
+    }
+
     public Account createAccount(Account blueprint) {
         checkNameConstraints(blueprint.getName());
         checkNameUniqueness(blueprint.getName());
+        checkAddressConstraints(blueprint.getAddress());
+        checkPhoneNumberConstraints(blueprint.getPhoneNumber());
 
         // TODO
         return null;
+    }
+
+    public Account updateAccount(Long id, Account blueprint) {
+        // TODO
+        return null;
+    }
+
+    public void deleteAccount(Long id) {
+        // TODO
     }
 
 
@@ -42,6 +58,14 @@ public class AccountService {
     private void checkNameUniqueness(String name) {
         if (accountRepository.existsByName(name))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "name is already taken");
+    }
+
+    private void checkAddressConstraints(String address) {
+        // TODO
+    }
+
+    private void checkPhoneNumberConstraints(String phoneNumber) {
+        // TODO
     }
 
 }
