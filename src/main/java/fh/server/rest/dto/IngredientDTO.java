@@ -2,11 +2,22 @@ package fh.server.rest.dto;
 
 public class IngredientDTO {
 
+    private Long id;
+
     private String name;
 
     private String desc;
 
     private Boolean available;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

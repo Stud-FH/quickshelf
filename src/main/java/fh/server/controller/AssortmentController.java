@@ -2,7 +2,7 @@ package fh.server.controller;
 
 import fh.server.rest.dto.IngredientDTO;
 import fh.server.rest.dto.PizzaDTO;
-import fh.server.service.AssortmentService;
+import fh.server.service.PizzaService;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
@@ -10,10 +10,12 @@ import java.util.Collection;
 @RestController
 public class AssortmentController {
 
-    private final AssortmentService supplyService;
+    private final PizzaService assortmentService;
+    private final AccountController accountController;
 
-    public AssortmentController(AssortmentService supplyService) {
-        this.supplyService = supplyService;
+    public AssortmentController(PizzaService assortmentService, AccountController accountController) {
+        this.assortmentService = assortmentService;
+        this.accountController = accountController;
     }
 
     public Collection<IngredientDTO> getIngredients() {

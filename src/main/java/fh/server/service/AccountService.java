@@ -25,7 +25,6 @@ public class AccountService {
     private static final long MIN_PASSWORD_CHARACTER_DIVERSITY = 2;
     private static final String PASSWORD_ALLOWED_SPECIAL_CHARACTERS = "()[]{}!?&%*@#";  // none of these are supposed to allow sql injection
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
     private final AccountRepository accountRepository;

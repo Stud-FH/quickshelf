@@ -1,23 +1,24 @@
 package fh.server.entity;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.*;
 
 @Entity
 public class Pizza implements Serializable {
 
     @Id
+    @GeneratedValue
+    private Long id; // used for most identification procedures
+
+    @Column(unique = true, nullable = false)
     private String name;
 
     @Column
     private String desc;
 
-    @ElementCollection
-    private Collection<String> ingredients;
+    @ManyToMany(targetEntity = Ingredient.class)
+    private final Set<Ingredient> ingredients = new HashSet<>();
 
     @Column(nullable = false)
     private Integer price = 15;
@@ -25,6 +26,14 @@ public class Pizza implements Serializable {
     @Column(nullable = false)
     private Boolean available;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -42,12 +51,16 @@ public class Pizza implements Serializable {
         this.desc = desc;
     }
 
-    public Collection<String> getIngredients() {
+    public Set<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(Collection<String> ingredients) {
-        this.ingredients = ingredients;
+    public void addIngredient(Ingredient ingredient) {
+        this.ingredients.add(ingredient);
+    }
+
+    public void removeIngredient(Ingredient ingredient) {
+        this.ingredients.remove(ingredient);
     }
 
     public Integer getPrice() {

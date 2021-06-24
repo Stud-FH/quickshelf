@@ -10,38 +10,14 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 
 @Service
-public class AssortmentService {
+public class PizzaService {
 
-    private final IngredientRepository ingredientRepository;
     private final PizzaRepository pizzaRepository;
 
-    public AssortmentService(
-            @Qualifier("ingredientRepository") IngredientRepository ingredientRepository,
+    public PizzaService(
             @Qualifier("pizzaRepository") PizzaRepository pizzaRepository
     ) {
-        this.ingredientRepository = ingredientRepository;
         this.pizzaRepository = pizzaRepository;
-    }
-
-
-
-    public Collection<Ingredient> getIngredients() {
-        // TODO
-        return null;
-    }
-
-    public Ingredient addIngredient(Ingredient blueprint) {
-        // TODO
-        return null;
-    }
-
-    public Ingredient updateIngredient(Ingredient blueprint) {
-        // TODO
-        return null;
-    }
-
-    public void removeIngredient(String name) {
-        // TODO
     }
 
     public Collection<Pizza> getPizzas() {
@@ -61,5 +37,9 @@ public class AssortmentService {
 
     public void removePizza(String name) {
         // TODO
+    }
+
+    private void checkNameUniqueness(String name) {
+
     }
 }

@@ -4,6 +4,8 @@ import java.util.Collection;
 
 public class PizzaDTO {
 
+    private Long id;
+
     private String name;
 
     private String desc;
@@ -13,6 +15,15 @@ public class PizzaDTO {
     private Integer price;
 
     private Boolean available;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
