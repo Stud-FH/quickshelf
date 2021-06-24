@@ -61,6 +61,18 @@ public class AccountService {
     }
 
     /**
+     * fetches an account from the repository
+     * @param id account id
+     * @return the account that was found
+     * @throws ResponseStatusException 404 if no account with this id exists;
+     */
+    public Account fetchAccount(Long id) {
+        if (!accountRepository.existsById(id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "invalid account id");
+        return accountRepository.getById(id);
+    }
+
+    /**
      * creates an account
      * @param blueprint a blueprint of the account to create
      * @return the new account
