@@ -4,13 +4,16 @@ public class AccountDTO {
 
     private Long id;
 
-    private String name;
+    private String email;
+
+    private String password;
 
     private String token;
 
     private String address;
 
     private String phoneNumber;
+
 
     public Long getId() {
         return id;
@@ -20,12 +23,20 @@ public class AccountDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getToken() {

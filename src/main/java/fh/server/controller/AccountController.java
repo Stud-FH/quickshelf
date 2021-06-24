@@ -1,5 +1,6 @@
 package fh.server.controller;
 
+import fh.server.entity.Account;
 import fh.server.rest.dto.AccountDTO;
 import fh.server.service.AccountService;
 import org.springframework.http.HttpStatus;
@@ -80,6 +81,7 @@ public class AccountController {
             @RequestHeader("id") Long id,
             @RequestHeader("token") String token
     ) {
+        Account account = accountService.authenticateAccount(id, token);
         // TODO
         return null;
     }
@@ -94,7 +96,7 @@ public class AccountController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public AccountDTO loginAccount(
-            @RequestHeader("name") String name,
+            @RequestHeader("email") String email,
             @RequestHeader("password") String password
     ) {
         // TODO

@@ -30,12 +30,12 @@ public class AssortmentService {
         return null;
     }
 
-    public Ingredient addIngredient(Ingredient ingredientDTO) {
+    public Ingredient addIngredient(Ingredient blueprint) {
         // TODO
         return null;
     }
 
-    public Ingredient updateIngredient(Ingredient ingredientDTO) {
+    public Ingredient updateIngredient(Ingredient blueprint) {
         // TODO
         return null;
     }
@@ -49,12 +49,12 @@ public class AssortmentService {
         return null;
     }
 
-    public Pizza addPizza(Pizza pizzaDTO) {
+    public Pizza addPizza(Pizza blueprint) {
         // TODO
         return null;
     }
 
-    public Pizza updatePizza(Pizza pizzaDTO) {
+    public Pizza updatePizza(Pizza blueprint) {
         // TODO
         return null;
     }

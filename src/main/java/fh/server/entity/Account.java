@@ -7,19 +7,29 @@ import javax.persistence.Id;
 @Entity
 public class Account {
 
+    public static final Integer CLEARANCE_LEVEL_UNVERIFIED = -1;    // no exclusive privileges
+    public static final Integer CLEARANCE_LEVEL_CUSTOMER = 0;       // required to place orders
+    public static final Integer CLEARANCE_LEVEL_EMPLOYEE = 1;       // required to modify orders
+    public static final Integer CLEARANCE_LEVEL_CHEF = 2;           // required to modify assortment
+    public static final Integer CLEARANCE_LEVEL_ADMIN = 3;          // required to modify accounts
+
     @Id
     @GeneratedValue
     private Long id;
 
-    private String name;
+    private String email;
 
-    private String token;
+    private String token; // used to verify an account. Refreshed with each login.
 
-    private Long passwordHash;
+    private transient String password; // not saved in DB
+
+    private Long passwordHash; // saved in DB instead of password
 
     private String address;
 
     private String phoneNumber;
+
+    private Integer clearanceLevel = CLEARANCE_LEVEL_CUSTOMER; // TODO implement account verification, then init new accounts with UNVERIFIED
 
 
     public Long getId() {
@@ -30,12 +40,12 @@ public class Account {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getToken() {
@@ -44,6 +54,14 @@ public class Account {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Long getPasswordHash() {
@@ -68,5 +86,13 @@ public class Account {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Integer getClearanceLevel() {
+        return clearanceLevel;
+    }
+
+    public void setClearanceLevel(Integer clearanceLevel) {
+        this.clearanceLevel = clearanceLevel;
     }
 }
