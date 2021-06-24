@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Service
 public class PizzaService {
@@ -36,12 +37,22 @@ public class PizzaService {
     }
 
     /**
+     * fetches a collection of pizzas from the repository
+     * @param ids pizzas to fetch
+     * @return found pizzas
+     */
+    public Collection<Pizza> getPizzas(Collection<Long> ids) {
+        return ids.stream().map(e -> pizzaRepository.getById(e)).collect(Collectors.toList());
+    }
+
+    /**
      * creates a new pizza entity
      * @param blueprint pizza blueprint
      * @param account caller
      * @return created pizza
      */
     public Pizza createPizza(Pizza blueprint, Account account) {
+        blueprint.setId(null);
         checkNameFormat(blueprint.getName());
         checkNameUniqueness(blueprint.getName());
         checkDescFormat(blueprint.getDesc());

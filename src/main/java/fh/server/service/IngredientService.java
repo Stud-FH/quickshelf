@@ -45,6 +45,7 @@ public class IngredientService {
      * @return created ingredient
      */
     public Ingredient createIngredient(Ingredient blueprint, Account account) {
+        blueprint.setId(null);
         checkNameFormat(blueprint.getName());
         checkNameUniqueness(blueprint.getName());
         checkDescFormat(blueprint.getDesc());

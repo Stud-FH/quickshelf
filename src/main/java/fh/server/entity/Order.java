@@ -10,7 +10,11 @@ import java.util.List;
 public class Order implements Serializable {
 
     @Id
+    @GeneratedValue
     private Long id;
+
+    @Column(nullable = false)
+    private Long customerId;
 
     @Column(nullable = false)
     private String address;
@@ -18,11 +22,17 @@ public class Order implements Serializable {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @ManyToMany(targetEntity = Pizza.class)
-    private List<Pizza> pizzas;
+    @ElementCollection
+    private List<Long> pizzaIds;
 
     @Column(nullable = false)
-    private OrderStatus status = OrderStatus.PLACED;
+    private Integer prize;
+
+    @Column(nullable = false)
+    private OrderStatus status = OrderStatus.CREATED;
+
+    @Column
+    private String comment;
 
 
     public Long getId() {
@@ -31,6 +41,14 @@ public class Order implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long clientId) {
+        this.customerId = clientId;
     }
 
     public String getAddress() {
@@ -49,12 +67,20 @@ public class Order implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Pizza> getPizzas() {
-        return pizzas;
+    public List<Long> getPizzaIds() {
+        return pizzaIds;
     }
 
-    public void setPizzas(List<Pizza> pizzas) {
-        this.pizzas = pizzas;
+    public void setPizzaIds(List<Long> pizzas) {
+        this.pizzaIds = pizzas;
+    }
+
+    public Integer getPrize() {
+        return prize;
+    }
+
+    public void setPrize(Integer prize) {
+        this.prize = prize;
     }
 
     public OrderStatus getStatus() {
@@ -63,5 +89,13 @@ public class Order implements Serializable {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

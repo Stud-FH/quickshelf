@@ -78,6 +78,7 @@ public class AccountService {
      * @throws ResponseStatusException if any attribute violates any security- or integrity constraints.
      */
     public Account createAccount(Account blueprint) {
+        blueprint.setId(null);
         checkEmailFormat(blueprint.getEmail());
         checkEmailUniqueness(blueprint.getEmail());
 

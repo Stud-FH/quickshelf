@@ -1,7 +1,6 @@
 package fh.server.rest.dto;
 
 import fh.server.constant.OrderStatus;
-import fh.server.entity.Pizza;
 
 import java.util.List;
 
@@ -9,13 +8,20 @@ public class OrderDTO {
 
     private Long id;
 
+    private Long clientId;
+
     private String address;
 
     private String phoneNumber;
 
-    private List<Pizza> pizzas;
+    private List<Long> pizzaIds;
+
+    private Integer prize;
 
     private OrderStatus status;
+
+    private String comment;
+
 
     public Long getId() {
         return id;
@@ -23,6 +29,14 @@ public class OrderDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
     }
 
     public String getAddress() {
@@ -41,12 +55,20 @@ public class OrderDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Pizza> getPizzas() {
-        return pizzas;
+    public List<Long> getPizzaIds() {
+        return pizzaIds;
     }
 
-    public void setPizzas(List<Pizza> pizzas) {
-        this.pizzas = pizzas;
+    public void setPizzaIds(List<Long> pizzaIds) {
+        this.pizzaIds = pizzaIds;
+    }
+
+    public Integer getPrize() {
+        return prize;
+    }
+
+    public void setPrize(Integer prize) {
+        this.prize = prize;
     }
 
     public OrderStatus getStatus() {
@@ -55,5 +77,13 @@ public class OrderDTO {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
