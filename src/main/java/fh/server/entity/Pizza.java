@@ -77,6 +77,7 @@ public class Pizza implements Serializable {
     }
 
     public Boolean getAvailable() {
+        for (Ingredient ingredient : ingredients) if (!ingredient.getAvailable()) return false;
         return available;
     }
 
