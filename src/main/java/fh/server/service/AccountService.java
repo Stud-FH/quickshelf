@@ -87,6 +87,7 @@ public class AccountService {
         blueprint.setPhoneNumber(checkPhoneNumberFormat(blueprint.getPhoneNumber()));
 
         blueprint.setPasswordHash(hash(blueprint.getPassword()));
+        blueprint.setPassword(null);
         blueprint.setToken(UUID.randomUUID().toString());
 
         // TODO verify account by email (requires additional attribute verificationToken, REST interface and mail sender)

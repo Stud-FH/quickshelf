@@ -14,6 +14,8 @@ public class AccountDTO {
 
     private String phoneNumber;
 
+    private Integer clearanceLevel;
+
 
     public Long getId() {
         return id;
@@ -61,5 +63,13 @@ public class AccountDTO {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Integer getClearanceLevel() {
+        return clearanceLevel;
+    }
+
+    public void setClearanceLevel(Integer clearanceLevel) {
+        this.clearanceLevel = clearanceLevel;
     }
 }

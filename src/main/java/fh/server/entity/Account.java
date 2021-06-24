@@ -1,11 +1,10 @@
 package fh.server.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Account {
+public class Account implements Serializable {
 
     public static final Integer CLEARANCE_LEVEL_UNVERIFIED = -1;    // no exclusive privileges
     public static final Integer CLEARANCE_LEVEL_CUSTOMER = 0;       // required to place orders
@@ -15,20 +14,27 @@ public class Account {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long id; // used for most identification procedures
 
-    private String email;
+    @Column(unique = true, nullable = false)
+    private String email; // used for identification in login
 
-    private String token; // used to verify an account. Refreshed with each login.
-
+    @Transient
     private transient String password; // not saved in DB
 
+    @Column(nullable = false)
     private Long passwordHash; // saved in DB instead of password
 
+    @Column(nullable = false)
+    private String token; // used to verify an account. Refreshed with each login.
+
+    @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private Integer clearanceLevel = CLEARANCE_LEVEL_CUSTOMER; // TODO implement account verification, then init new accounts with UNVERIFIED
 
 
