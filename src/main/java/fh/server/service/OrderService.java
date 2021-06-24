@@ -55,7 +55,7 @@ public class OrderService {
         blueprint.setAddress(customer.getAddress());
         blueprint.setPhoneNumber(customer.getPhoneNumber());
         checkPizzasConstraints(blueprint.getPizzaIds());
-        blueprint.setPrize(calculatePrize(blueprint.getPizzaIds()));
+        blueprint.setPrice(calculatePrize(blueprint.getPizzaIds()));
         checkCommentFormat(blueprint.getComment());
 
         Order created = orderRepository.saveAndFlush(blueprint);

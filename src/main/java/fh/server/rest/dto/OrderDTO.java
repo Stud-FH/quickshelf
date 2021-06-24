@@ -8,7 +8,7 @@ public class OrderDTO {
 
     private Long id;
 
-    private Long clientId;
+    private Long customerId;
 
     private String address;
 
@@ -16,7 +16,7 @@ public class OrderDTO {
 
     private List<Long> pizzaIds;
 
-    private Integer prize;
+    private Integer price;
 
     private OrderStatus status;
 
@@ -31,12 +31,12 @@ public class OrderDTO {
         this.id = id;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getAddress() {
@@ -63,12 +63,12 @@ public class OrderDTO {
         this.pizzaIds = pizzaIds;
     }
 
-    public Integer getPrize() {
-        return prize;
+    public Integer getPrice() {
+        return price;
     }
 
-    public void setPrize(Integer prize) {
-        this.prize = prize;
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 
     public OrderStatus getStatus() {

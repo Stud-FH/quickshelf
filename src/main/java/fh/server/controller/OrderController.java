@@ -91,7 +91,7 @@ public class OrderController {
         Collection<Order> orders = orderService.getAllOrders();
         Collection<OrderDTO> list = orders.stream().map(DTOMapper.INSTANCE::convertEntityToOrderDTO).collect(Collectors.toList());
         if (status.isPresent()) list = list.stream().filter(e -> e.getStatus() == status.get()).collect(Collectors.toList());
-        if (customerId.isPresent()) list = list.stream().filter(e -> e.getClientId().equals(customerId.get())).collect(Collectors.toList());
+        if (customerId.isPresent()) list = list.stream().filter(e -> e.getCustomerId().equals(customerId.get())).collect(Collectors.toList());
         return list;
     }
 

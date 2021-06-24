@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
+@Table(name = "ORDER")
 public class Order implements Serializable {
 
     @Id
@@ -26,7 +27,7 @@ public class Order implements Serializable {
     private List<Long> pizzaIds;
 
     @Column(nullable = false)
-    private Integer prize;
+    private Integer price;
 
     @Column(nullable = false)
     private OrderStatus status = OrderStatus.CREATED;
@@ -75,12 +76,12 @@ public class Order implements Serializable {
         this.pizzaIds = pizzas;
     }
 
-    public Integer getPrize() {
-        return prize;
+    public Integer getPrice() {
+        return price;
     }
 
-    public void setPrize(Integer prize) {
-        this.prize = prize;
+    public void setPrice(Integer prize) {
+        this.price = prize;
     }
 
     public OrderStatus getStatus() {

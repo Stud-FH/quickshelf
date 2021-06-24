@@ -33,6 +33,7 @@ public class AccountService {
             @Qualifier("accountRepository") AccountRepository accountRepository
     ) {
         this.accountRepository = accountRepository;
+
     }
 
     /**
@@ -89,6 +90,8 @@ public class AccountService {
         blueprint.setPasswordHash(hash(blueprint.getPassword()));
         blueprint.setPassword(null);
         blueprint.setToken(UUID.randomUUID().toString());
+        blueprint.setClearanceLevel(accountRepository.findAll().isEmpty()?
+                Account.CLEARANCE_LEVEL_ADMIN : Account.CLEARANCE_LEVEL_CUSTOMER);
 
         // TODO verify account by email (requires additional attribute verificationToken, REST interface and mail sender)
 

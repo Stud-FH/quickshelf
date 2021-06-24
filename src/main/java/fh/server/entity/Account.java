@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Table(name = "ACCOUNT")
 public class Account implements Serializable {
 
     public static final Integer CLEARANCE_LEVEL_UNVERIFIED = -1;    // no exclusive privileges
@@ -35,7 +36,7 @@ public class Account implements Serializable {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private Integer clearanceLevel = CLEARANCE_LEVEL_CUSTOMER; // TODO implement account verification, then init new accounts with UNVERIFIED
+    private Integer clearanceLevel;
 
 
     public Long getId() {
