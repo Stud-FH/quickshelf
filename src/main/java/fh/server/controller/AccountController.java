@@ -66,7 +66,6 @@ public class AccountController {
      */
     @DeleteMapping("/account/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
     public void deleteAccount(
             @RequestHeader("id") Long id,
             @RequestHeader("token") String token,
