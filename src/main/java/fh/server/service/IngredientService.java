@@ -99,10 +99,10 @@ public class IngredientService {
      * @throws ResponseStatusException 404 if no ingredient is found
      */
     public void deleteIngredient(Long id, Account account) {
-        Ingredient ingredient = ingredientRepository.getById(id);
         if (!ingredientRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "invalid ingredient id");
 
+        Ingredient ingredient = ingredientRepository.getById(id);
         LOGGER.info(account.getEmail() + " deleted ingredient " + ingredient.getName());
 
         Collection<Pizza> affectedPizzas = pizzaRepository.findAllByIngredientsContaining(ingredient);
