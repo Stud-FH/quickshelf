@@ -91,29 +91,29 @@ public class IngredientService {
         return ingredient;
     }
 
-    /**
-     * deletes an ingredient from the repository.
-     * before deletion, the ingredient is removed from all the pizzas using it (list is printed to console).
-     * @param id ingredient to delete
-     * @param account caller
-     * @throws ResponseStatusException 404 if no ingredient is found
-     */
-    public void deleteIngredient(Long id, Account account) {
-        if (!ingredientRepository.existsById(id))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "invalid ingredient id");
-
-        Ingredient ingredient = ingredientRepository.getById(id);
-        LOGGER.info(account.getEmail() + " deleted ingredient " + ingredient.getName());
-
-        Collection<Pizza> affectedPizzas = pizzaRepository.findAllByIngredientsContaining(ingredient);
-        for (Pizza pizza : affectedPizzas) {
-            pizza.removeIngredient(ingredient);
-            LOGGER.info("removed ingredient from pizza " + pizza.getName());
-        }
-        pizzaRepository.flush();
-        ingredientRepository.deleteById(id);
-        ingredientRepository.flush();
-    }
+//    /**
+//     * deletes an ingredient from the repository.
+//     * before deletion, the ingredient is removed from all the pizzas using it (list is printed to console).
+//     * @param id ingredient to delete
+//     * @param account caller
+//     * @throws ResponseStatusException 404 if no ingredient is found
+//     */
+//    public void deleteIngredient(Long id, Account account) {
+//        if (!ingredientRepository.existsById(id))
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "invalid ingredient id");
+//
+//        Ingredient ingredient = ingredientRepository.getById(id);
+//        LOGGER.info(account.getEmail() + " deleted ingredient " + ingredient.getName());
+//
+//        Collection<Pizza> affectedPizzas = pizzaRepository.findAllByIngredientsContaining(ingredient);
+//        for (Pizza pizza : affectedPizzas) {
+//            pizza.removeIngredient(ingredient);
+//            LOGGER.info("removed ingredient from pizza " + pizza.getName());
+//        }
+//        pizzaRepository.flush();
+//        ingredientRepository.deleteById(id);
+//        ingredientRepository.flush();
+//    }
 
     /**
      * checks if a String is a valid ingredient name

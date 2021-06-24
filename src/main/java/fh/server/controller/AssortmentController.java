@@ -33,9 +33,9 @@ public class AssortmentController {
         return null;
     }
 
-    public void removeIngredient(String name) {
-        // TODO
-    }
+//    public void deleteIngredient(String name) {
+//
+//    }
 
     public Collection<PizzaDTO> getPizzas() {
         // TODO
@@ -52,9 +52,9 @@ public class AssortmentController {
         return null;
     }
 
-    public void removePizza(String name) {
-        // TODO
-    }
+//    public void deletePizza(String name) {
+//
+//    }
 
 
 }
