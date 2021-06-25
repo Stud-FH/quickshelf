@@ -55,10 +55,10 @@ public class OrderService {
         blueprint.setCustomerId(customer.getId());
         blueprint.setAddress(customer.getAddress());
         blueprint.setPhoneNumber(customer.getPhoneNumber());
-        blueprint.setStatus(OrderStatus.CREATED);
         checkPizzasConstraints(blueprint.getPizzas());
         blueprint.setPrice(calculatePrize(blueprint.getPizzas()));
         checkCommentFormat(blueprint.getComment());
+        blueprint.setStatus(OrderStatus.CREATED);
 
         Order created = orderRepository.saveAndFlush(blueprint);
         LOGGER.info(customer.getEmail() + " created an order");

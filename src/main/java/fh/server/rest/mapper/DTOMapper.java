@@ -93,20 +93,24 @@ public interface DTOMapper {
     OrderDTO convertEntityToOrderDTO(Order order);
 
     default Set<Ingredient> convertIngredientIdList(Collection<Long> ids) {
+        if (ids == null) return null;
         IngredientRepository ingredientRepository = SpringContext.getBean(IngredientRepository.class);
         return ids.stream().map(ingredientRepository::getById).collect(Collectors.toSet());
     }
 
-    default List<Long> convertIngredientList(Collection<Ingredient> ids) {
-        return ids.stream().map(Ingredient::getId).collect(Collectors.toList());
+    default List<Long> convertIngredientList(Collection<Ingredient> ingredients) {
+        if (ingredients == null) return null;
+        return ingredients.stream().map(Ingredient::getId).collect(Collectors.toList());
     }
 
     default List<Pizza> convertPizzaIdList(Collection<Long> ids) {
+        if (ids == null) return null;
         PizzaRepository pizzaRepository = SpringContext.getBean(PizzaRepository.class);
         return ids.stream().map(pizzaRepository::getById).collect(Collectors.toList());
     }
 
-    default List<Long> convertPizzaList(Collection<Pizza> ids) {
-        return ids.stream().map(Pizza::getId).collect(Collectors.toList());
+    default List<Long> convertPizzaList(Collection<Pizza> pizzas) {
+        if (pizzas == null) return null;
+        return pizzas.stream().map(Pizza::getId).collect(Collectors.toList());
     }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "ORDER")
+@Table(name = "PIZZA_ORDER")
 public class Order implements Serializable {
 
     @Id
@@ -30,7 +30,7 @@ public class Order implements Serializable {
     private Integer price;
 
     @Column(nullable = false)
-    private OrderStatus status = OrderStatus.CREATED;
+    private OrderStatus status;
 
     @Column
     private String comment;
