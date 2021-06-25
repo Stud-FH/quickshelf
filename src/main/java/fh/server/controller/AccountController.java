@@ -23,7 +23,7 @@ public class AccountController {
      * @param accountDTO blueprint
      * @return newly created account data
      */
-    @PostMapping("/account/register")
+    @PostMapping("/account/create")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public AccountDTO registerAccount(
@@ -54,7 +54,7 @@ public class AccountController {
         Account blueprint = DTOMapper.INSTANCE.convertAccountDTOtoEntity(accountDTO);
         accountService.authenticateAccount(id, token,
                 remote.isPresent()? Account.CLEARANCE_LEVEL_ADMIN : Account.CLEARANCE_LEVEL_CUSTOMER);
-        Account updated = accountService.updateAccount(remote.orElse(id), blueprint);
+        Account updated = accountService.updateAccount(remote.orElse(id), blueprint, remote.isPresent());
         return DTOMapper.INSTANCE.convertEntityToAccountDTO(updated);
     }
 

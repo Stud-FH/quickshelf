@@ -64,7 +64,7 @@ public class Pizza implements Serializable {
         this.ingredients.remove(ingredient);
     }
 
-    public void setIngredients(Set<Ingredient> ingredients) {
+    public void setIngredients(Collection<Ingredient> ingredients) {
         this.ingredients.clear();
         this.ingredients.addAll(ingredients);
     }

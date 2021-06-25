@@ -14,6 +14,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -64,7 +66,7 @@ public interface DTOMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "desc", target = "desc")
-    @Mapping(source = "ingredients", target = "ingredients")
+    @Mapping(expression = "java(convertIngredientList(pizza.getIngredients()))", target = "ingredients")
     @Mapping(source = "price", target = "price")
     @Mapping(source = "available", target = "available")
     PizzaDTO convertEntityToPizzaDTO(Pizza pizza);
@@ -89,8 +91,12 @@ public interface DTOMapper {
     @Mapping(source = "comment", target = "comment")
     OrderDTO convertEntityToOrderDTO(Order order);
 
-    default Set<Ingredient> convertIngredientIdList(Set<Long> ids) {
+    default Set<Ingredient> convertIngredientIdList(Collection<Long> ids) {
         IngredientRepository ingredientRepository = SpringContext.getBean(IngredientRepository.class);
         return ids.stream().map(ingredientRepository::getById).collect(Collectors.toSet());
+    }
+
+    default List<Long> convertIngredientList(Collection<Ingredient> ids) {
+        return ids.stream().map(Ingredient::getId).collect(Collectors.toList());
     }
 }

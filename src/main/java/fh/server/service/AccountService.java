@@ -133,9 +133,12 @@ public class AccountService {
      * @return the updated account
      * @throws ResponseStatusException if an update violates any security- or integrity constraints. In that case no updates are performed.
      */
-    public Account updateAccount(Long id, Account blueprint) {
+    public Account updateAccount(Long id, Account blueprint, boolean remote) {
         if (!accountRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "unknown id");
+
+        Account account = accountRepository.getById(id);
+
         // first check all modifications
         if (blueprint.getEmail() != null) {
             checkEmailFormat(blueprint.getEmail());
@@ -150,9 +153,13 @@ public class AccountService {
         if (blueprint.getPhoneNumber() != null) {
             blueprint.setPhoneNumber(checkPhoneNumberFormat(blueprint.getPhoneNumber()));
         }
+        if (blueprint.getClearanceLevel() != null) {
+            if (account.getClearanceLevel() >= Account.CLEARANCE_LEVEL_ADMIN
+                    && blueprint.getClearanceLevel() < Account.CLEARANCE_LEVEL_ADMIN)
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "cannot degrade an admin account");
+        }
 
         // if all modifications are valid, perform the updates
-        Account account = accountRepository.getById(id);
         if (blueprint.getEmail() != null) {
             account.setEmail(blueprint.getEmail());
         }
@@ -164,6 +171,9 @@ public class AccountService {
         }
         if (blueprint.getPhoneNumber() != null) {
             account.setPhoneNumber(blueprint.getPhoneNumber());
+        }
+        if (remote && blueprint.getClearanceLevel() != null) {
+            account.setClearanceLevel(blueprint.getClearanceLevel());
         }
         accountRepository.flush();
         LOGGER.info(account.getEmail() + " updated their account");

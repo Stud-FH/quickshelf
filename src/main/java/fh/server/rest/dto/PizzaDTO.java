@@ -3,6 +3,7 @@ package fh.server.rest.dto;
 import fh.server.entity.Ingredient;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ public class PizzaDTO {
 
     private String desc;
 
-    private Set<Long> ingredients;
+    private List<Long> ingredients;
 
     private Integer price;
 
@@ -45,12 +46,12 @@ public class PizzaDTO {
         this.desc = desc;
     }
 
-    public Set<Long> getIngredients() {
+    public List<Long> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(Set<Ingredient> ingredients) {
-        this.ingredients = ingredients.stream().map(Ingredient::getId).collect(Collectors.toSet());
+    public void setIngredients(List<Long> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public Integer getPrice() {
