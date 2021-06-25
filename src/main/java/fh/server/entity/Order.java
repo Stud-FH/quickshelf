@@ -23,8 +23,8 @@ public class Order implements Serializable {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @ElementCollection
-    private List<Long> pizzaIds;
+    @ManyToMany(targetEntity = Pizza.class)
+    private List<Pizza> pizzas;
 
     @Column(nullable = false)
     private Integer price;
@@ -68,12 +68,12 @@ public class Order implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Long> getPizzaIds() {
-        return pizzaIds;
+    public List<Pizza> getPizzas() {
+        return pizzas;
     }
 
-    public void setPizzaIds(List<Long> pizzas) {
-        this.pizzaIds = pizzas;
+    public void setPizzas(List<Pizza> pizzas) {
+        this.pizzas = pizzas;
     }
 
     public Integer getPrice() {
