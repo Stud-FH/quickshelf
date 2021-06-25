@@ -1,5 +1,6 @@
 package fh.server.service;
 
+import fh.server.constant.OrderStatus;
 import fh.server.entity.Account;
 import fh.server.entity.Order;
 import fh.server.entity.Pizza;
@@ -54,8 +55,9 @@ public class OrderService {
         blueprint.setCustomerId(customer.getId());
         blueprint.setAddress(customer.getAddress());
         blueprint.setPhoneNumber(customer.getPhoneNumber());
-        checkPizzasConstraints(blueprint.getPizzaIds());
-        blueprint.setPrice(calculatePrize(blueprint.getPizzaIds()));
+        blueprint.setStatus(OrderStatus.CREATED);
+        checkPizzasConstraints(blueprint.getPizzas());
+        blueprint.setPrice(calculatePrize(blueprint.getPizzas()));
         checkCommentFormat(blueprint.getComment());
 
         Order created = orderRepository.saveAndFlush(blueprint);
@@ -110,35 +112,24 @@ public class OrderService {
 
     /**
      * calculates the prize for a list of pizzas
-     * @param pizzaIds pizza id list
+     * @param pizzas pizza list
      * @return summed up prize of all the pizzas + delivery cost if free-delivery threshold not reached
      */
-    private int calculatePrize(List<Long> pizzaIds) {
+    private int calculatePrize(List<Pizza> pizzas) {
         int prize = 0;
-        List<Pizza> pizzas = pizzaIds.stream().map(pizzaRepository::getById).collect(Collectors.toList());
         for (Pizza pizza : pizzas) prize += pizza.getPrice();
         if (prize < FREE_DELIVERY_THRESHOLD) prize += DELIVERY_COST;
         return prize;
     }
 
     /**
-     * checks if a list of ids is a valid pizza list
-     * @param pizzaIds the list of ids to check
-     * @throws ResponseStatusException
-     *          422 if the list is null or empty;
-     *          404 if a pizza id is invalid;
-     *          403 if a pizza id references an unavailable pizza
+     * checks if a list of pizzas is valid
+     * @param pizzas list of pizzas to check
+     * @throws ResponseStatusException if any security- or integrity constraints are violated by this list
      */
-    private void checkPizzasConstraints(List<Long> pizzaIds) {
-        if (pizzaIds == null || pizzaIds.isEmpty())
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "an order must contain at least one pizza");
-        for (Long id : pizzaIds) {
-            if (id == null || !pizzaRepository.existsById(id))
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "at least one pizza from this order doesn't exist");
-            Pizza pizza = pizzaRepository.getById(id);
-            if (!pizza.getAvailable())
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "the following pizza is unavailable: " + pizza.getName());
-        }
+    private void checkPizzasConstraints(List<Pizza> pizzas) {
+        if (pizzas.contains(null))
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "invalid pizza");
     }
 
     /**
@@ -147,6 +138,7 @@ public class OrderService {
      * @throws ResponseStatusException if any security- or integrity constraints are violated by this comment
      */
     private void checkCommentFormat(String comment) {
+        if (comment == null) return;
         if (comment.length() >= 255)
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "comment too long");
         // TODO check for possible code injection

@@ -176,7 +176,7 @@ public class AccountService {
             account.setClearanceLevel(blueprint.getClearanceLevel());
         }
         accountRepository.flush();
-        LOGGER.info(account.getEmail() + " updated their account");
+        LOGGER.info(account.getEmail() + (remote? " was updated" : " updated their account"));
         return account;
     }
 

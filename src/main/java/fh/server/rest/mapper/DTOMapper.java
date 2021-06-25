@@ -6,6 +6,7 @@ import fh.server.entity.Ingredient;
 import fh.server.entity.Order;
 import fh.server.entity.Pizza;
 import fh.server.repository.IngredientRepository;
+import fh.server.repository.PizzaRepository;
 import fh.server.rest.dto.AccountDTO;
 import fh.server.rest.dto.IngredientDTO;
 import fh.server.rest.dto.OrderDTO;
@@ -58,7 +59,7 @@ public interface DTOMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "desc", target = "desc")
-    @Mapping(expression = "java(convertIngredientIdList(pizzaDTO.getIngredients()))", target = "ingredients")
+    @Mapping(expression = "java(convertIngredientIdList(pizzaDTO.getIngredientIds()))", target = "ingredients")
     @Mapping(source = "price", target = "price")
     @Mapping(source = "available", target = "available")
     Pizza convertPizzaDTOtoEntity(PizzaDTO pizzaDTO);
@@ -66,7 +67,7 @@ public interface DTOMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "desc", target = "desc")
-    @Mapping(expression = "java(convertIngredientList(pizza.getIngredients()))", target = "ingredients")
+    @Mapping(expression = "java(convertIngredientList(pizza.getIngredients()))", target = "ingredientIds")
     @Mapping(source = "price", target = "price")
     @Mapping(source = "available", target = "available")
     PizzaDTO convertEntityToPizzaDTO(Pizza pizza);
@@ -75,7 +76,7 @@ public interface DTOMapper {
     @Mapping(source = "customerId", target = "customerId")
     @Mapping(source = "address", target = "address")
     @Mapping(source = "phoneNumber", target = "phoneNumber")
-    @Mapping(source = "pizzaIds", target = "pizzaIds")
+    @Mapping(expression = "java(convertPizzaIdList(orderDTO.getPizzaIds()))", target = "pizzas")
     @Mapping(source = "price", target = "price")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "comment", target = "comment")
@@ -85,7 +86,7 @@ public interface DTOMapper {
     @Mapping(source = "customerId", target = "customerId")
     @Mapping(source = "address", target = "address")
     @Mapping(source = "phoneNumber", target = "phoneNumber")
-    @Mapping(source = "pizzaIds", target = "pizzaIds")
+    @Mapping(expression = "java(convertPizzaList(order.getPizzas()))", target = "pizzaIds")
     @Mapping(source = "price", target = "price")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "comment", target = "comment")
@@ -98,5 +99,14 @@ public interface DTOMapper {
 
     default List<Long> convertIngredientList(Collection<Ingredient> ids) {
         return ids.stream().map(Ingredient::getId).collect(Collectors.toList());
+    }
+
+    default List<Pizza> convertPizzaIdList(Collection<Long> ids) {
+        PizzaRepository pizzaRepository = SpringContext.getBean(PizzaRepository.class);
+        return ids.stream().map(pizzaRepository::getById).collect(Collectors.toList());
+    }
+
+    default List<Long> convertPizzaList(Collection<Pizza> ids) {
+        return ids.stream().map(Pizza::getId).collect(Collectors.toList());
     }
 }
