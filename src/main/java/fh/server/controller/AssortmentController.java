@@ -70,7 +70,7 @@ public class AssortmentController {
             @RequestHeader("accountId") Long accountId,
             @RequestHeader("token") String token
     ) {
-        Account account = accountService.authenticateAccount(accountId, token, Account.CLEARANCE_LEVEL_CHEF);
+        Account account = accountService.authenticateAccount(accountId, token, Account.CLEARANCE_LEVEL_SUPERVISOR);
         Ingredient blueprint = DTOMapper.INSTANCE.convertIngredientDTOtoEntity(ingredientDTO);
         Ingredient created = ingredientService.createIngredient(blueprint, account);
         return DTOMapper.INSTANCE.convertEntityToIngredientDTO(created);
@@ -93,7 +93,7 @@ public class AssortmentController {
             @RequestHeader("token") String token,
             @RequestHeader("ingredientId") Long ingredientId
     ) {
-        Account account = accountService.authenticateAccount(accountId, token, Account.CLEARANCE_LEVEL_CHEF);
+        Account account = accountService.authenticateAccount(accountId, token, Account.CLEARANCE_LEVEL_SUPERVISOR);
         Ingredient blueprint = DTOMapper.INSTANCE.convertIngredientDTOtoEntity(ingredientDTO);
         Ingredient updated = ingredientService.updateIngredient(ingredientId, blueprint, account);
         return DTOMapper.INSTANCE.convertEntityToIngredientDTO(updated);
@@ -138,7 +138,7 @@ public class AssortmentController {
             @RequestHeader("accountId") Long accountId,
             @RequestHeader("token") String token
     ) {
-        Account account = accountService.authenticateAccount(accountId, token, Account.CLEARANCE_LEVEL_CHEF);
+        Account account = accountService.authenticateAccount(accountId, token, Account.CLEARANCE_LEVEL_SUPERVISOR);
         Pizza blueprint = DTOMapper.INSTANCE.convertPizzaDTOtoEntity(pizzaDTO);
         Pizza created = pizzaService.createPizza(blueprint, account);
         return DTOMapper.INSTANCE.convertEntityToPizzaDTO(created);
@@ -161,7 +161,7 @@ public class AssortmentController {
             @RequestHeader("token") String token,
             @RequestHeader("pizzaId") Long pizzaId
     ) {
-        Account account = accountService.authenticateAccount(accountId, token, Account.CLEARANCE_LEVEL_CHEF);
+        Account account = accountService.authenticateAccount(accountId, token, Account.CLEARANCE_LEVEL_SUPERVISOR);
         Pizza blueprint = DTOMapper.INSTANCE.convertPizzaDTOtoEntity(pizzaDTO);
         Pizza updated = pizzaService.updatePizza(pizzaId, blueprint, account);
         return DTOMapper.INSTANCE.convertEntityToPizzaDTO(updated);

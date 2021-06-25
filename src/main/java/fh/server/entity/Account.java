@@ -10,7 +10,7 @@ public class Account implements Serializable {
     public static final Integer CLEARANCE_LEVEL_UNVERIFIED = -1;    // no exclusive privileges
     public static final Integer CLEARANCE_LEVEL_CUSTOMER = 0;       // required to place orders
     public static final Integer CLEARANCE_LEVEL_EMPLOYEE = 1;       // required to modify orders
-    public static final Integer CLEARANCE_LEVEL_CHEF = 2;           // required to modify assortment
+    public static final Integer CLEARANCE_LEVEL_SUPERVISOR = 2;     // required to modify assortment
     public static final Integer CLEARANCE_LEVEL_ADMIN = 3;          // required to modify accounts
 
     @Id
