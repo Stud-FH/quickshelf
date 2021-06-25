@@ -57,7 +57,7 @@ public class PizzaService {
         checkNameUniqueness(blueprint.getName());
         checkDescFormat(blueprint.getDesc());
         checkPrizeConstraints(blueprint.getPrice());
-        if (blueprint.getAvailable() == null) blueprint.setAvailable(true);
+        if (blueprint.getAvailable() == null) blueprint.setAvailable(Boolean.TRUE);
         Pizza created = pizzaRepository.saveAndFlush(blueprint);
         LOGGER.info(account.getEmail() + " created pizza " + created.getName());
         return created;
