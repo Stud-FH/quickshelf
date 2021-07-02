@@ -69,22 +69,24 @@ public class IngredientService {
         if (!ingredientRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "invalid ingredient id");
 
-        if (blueprint.getName() != null) {
+        Ingredient ingredient = ingredientRepository.getById(id);
+
+        if (blueprint.getName() != null && !blueprint.getName().equals(ingredient.getName())) {
             checkNameFormat(blueprint.getName());
             checkNameUniqueness(blueprint.getName());
         }
-        if (blueprint.getDesc() != null) {
+        if (blueprint.getDesc() != null && !blueprint.getDesc().equals(ingredient.getDesc())) {
             checkDescFormat(blueprint.getDesc());
         }
 
-        Ingredient ingredient = ingredientRepository.getById(id);
-        if (blueprint.getName() != null) {
+
+        if (blueprint.getName() != null && !blueprint.getName().equals(ingredient.getName())) {
             ingredient.setName(blueprint.getName());
         }
-        if (blueprint.getDesc() != null) {
+        if (blueprint.getDesc() != null && !blueprint.getDesc().equals(ingredient.getDesc())) {
             ingredient.setDesc(blueprint.getDesc());
         }
-        if (blueprint.getAvailable() != null) {
+        if (blueprint.getAvailable() != null && !blueprint.getAvailable().equals(ingredient.getAvailable())) {
             ingredient.setAvailable(blueprint.getAvailable());
         }
         ingredientRepository.flush();
