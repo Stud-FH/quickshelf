@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import java.util.Properties;
+//import javax.mail.*;
+//import javax.mail.internet.InternetAddress;
+//import javax.mail.internet.MimeBodyPart;
+//import javax.mail.internet.MimeMessage;
+//import javax.mail.internet.MimeMultipart;
+//import java.util.Properties;
 import java.util.UUID;
 
 @Service
@@ -29,13 +29,13 @@ public class AccountService {
     private static final long MIN_PASSWORD_CHARACTER_DIVERSITY = 2;
     private static final String PASSWORD_ALLOWED_SPECIAL_CHARACTERS = "()[]{}!?&%*@#";  // none of these are supposed to allow sql injection
 
-    public static final String MAIL_ADDRESS = "fh.mail@bluewin.ch";
-    public static final String MAIL_USERNAME = "fh.mail";
-    public static final String MAIL_PASSWORD = "1234";
+//    public static final String MAIL_ADDRESS = "fh.mail@bluewin.ch";
+//    public static final String MAIL_USERNAME = "fh.mail";
+//    public static final String MAIL_PASSWORD = "1234";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
-    private Session session;
+//    private Session session;
 
     private final AccountRepository accountRepository;
 
