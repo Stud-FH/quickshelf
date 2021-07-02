@@ -92,10 +92,10 @@ public interface DTOMapper {
     @Mapping(source = "comment", target = "comment")
     OrderDTO convertEntityToOrderDTO(Order order);
 
-    default Set<Ingredient> convertIngredientIdList(Collection<Long> ids) {
+    default List<Ingredient> convertIngredientIdList(Collection<Long> ids) {
         if (ids == null) return null;
         IngredientRepository ingredientRepository = SpringContext.getBean(IngredientRepository.class);
-        return ids.stream().map(ingredientRepository::getById).collect(Collectors.toSet());
+        return ids.stream().map(ingredientRepository::getById).collect(Collectors.toList());
     }
 
     default List<Long> convertIngredientList(Collection<Ingredient> ingredients) {

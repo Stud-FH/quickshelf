@@ -77,31 +77,33 @@ public class PizzaService {
         if (!pizzaRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "invalid pizza id");
 
-        if (blueprint.getName() != null) {
+        Pizza pizza = pizzaRepository.getById(id);
+
+        if (blueprint.getName() != null && !blueprint.getName().equals(pizza.getName())) {
             checkNameFormat(blueprint.getName());
             checkNameUniqueness(blueprint.getName());
         }
-        if (blueprint.getDesc() != null) {
+        if (blueprint.getDesc() != null && !blueprint.getDesc().equals(pizza.getDesc())) {
             checkDescFormat(blueprint.getDesc());
         }
-        if (blueprint.getPrice() != null) {
+        if (blueprint.getPrice() != null && !blueprint.getPrice().equals(pizza.getPrice())) {
             checkPrizeConstraints(blueprint.getPrice());
         }
 
-        Pizza pizza = pizzaRepository.getById(id);
-        if (blueprint.getName() != null) {
+
+        if (blueprint.getName() != null && !blueprint.getName().equals(pizza.getName())) {
             pizza.setName(blueprint.getName());
         }
-        if (blueprint.getDesc() != null) {
+        if (blueprint.getDesc() != null && !blueprint.getDesc().equals(pizza.getDesc())) {
             pizza.setDesc(blueprint.getDesc());
         }
-        if (blueprint.getIngredients() != null) {
+        if (blueprint.getIngredients() != null && !blueprint.getIngredients().equals(pizza.getIngredients())) {
             pizza.setIngredients(blueprint.getIngredients());
         }
-        if (blueprint.getPrice() != null) {
+        if (blueprint.getPrice() != null && !blueprint.getPrice().equals(pizza.getPrice())) {
             pizza.setPrice(blueprint.getPrice());
         }
-        if (blueprint.getAvailable() != null) {
+        if (blueprint.getAvailable() != null && !blueprint.getAvailable().equals(pizza.getAvailable())) {
             pizza.setAvailable(blueprint.getAvailable());
         }
         pizzaRepository.flush();

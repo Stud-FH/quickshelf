@@ -19,7 +19,7 @@ public class Pizza implements Serializable {
     private String desc;
 
     @ManyToMany(targetEntity = Ingredient.class)
-    private final Set<Ingredient> ingredients = new HashSet<>();
+    private final List<Ingredient> ingredients = new ArrayList<>();
 
     @Column(nullable = false)
     private Integer price = 15;
@@ -52,7 +52,7 @@ public class Pizza implements Serializable {
         this.desc = desc;
     }
 
-    public Set<Ingredient> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 

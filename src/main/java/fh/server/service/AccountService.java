@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
-import java.util.HashSet;
-import java.util.Set;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.util.Properties;
 import java.util.UUID;
 
 @Service
@@ -25,7 +29,13 @@ public class AccountService {
     private static final long MIN_PASSWORD_CHARACTER_DIVERSITY = 2;
     private static final String PASSWORD_ALLOWED_SPECIAL_CHARACTERS = "()[]{}!?&%*@#";  // none of these are supposed to allow sql injection
 
+    public static final String MAIL_ADDRESS = "fh.mail@bluewin.ch";
+    public static final String MAIL_USERNAME = "fh.mail";
+    public static final String MAIL_PASSWORD = "1234";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
+
+    private Session session;
 
     private final AccountRepository accountRepository;
 
@@ -33,6 +43,68 @@ public class AccountService {
             @Qualifier("accountRepository") AccountRepository accountRepository
     ) {
         this.accountRepository = accountRepository;
+    }
+
+    @PostConstruct
+    private void init() {
+
+        if (accountRepository.findAll().isEmpty()) {
+            Account admin = new Account();
+            admin.setEmail("admin");
+            admin.setPassword("1234");
+            admin.setPasswordHash(hash(admin.getPassword()));
+            admin.setAddress("address");
+            admin.setPhoneNumber("+41 00 000 00 00");
+            admin.setToken(UUID.randomUUID().toString());
+            admin.setClearanceLevel(Account.CLEARANCE_LEVEL_ADMIN);
+
+            accountRepository.saveAndFlush(admin);
+            LOGGER.info("admin account created. Please update this account as soon as possible to ensure safety.");
+        }
+
+//        java.lang.System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,TLSv1.3");
+//
+//        Properties properties = new Properties();
+//        properties.put("mail.smtp.auth", true);
+//        properties.put("mail.smtp.starttls.enable", "true");
+//        properties.put("mail.smtp.host", "smtpauths.bluewin.ch");
+//        properties.put("mail.smtp.port", "465");
+//        properties.put("mail.smtp.ssl.trust", "smtpauths.bluewin.ch");
+//
+//        session = Session.getInstance(properties, new Authenticator() {
+//            @Override
+//            protected PasswordAuthentication getPasswordAuthentication() {
+//                return new PasswordAuthentication(MAIL_USERNAME, MAIL_PASSWORD);
+//            }
+//        });
+//
+//        try {
+//
+//            Message message = new MimeMessage(session);
+//            message.setFrom(new InternetAddress(MAIL_ADDRESS));
+//            message.setRecipients(
+//                    Message.RecipientType.TO, InternetAddress.parse("dr_duke@outlook.com"));
+//            message.setSubject("Mail Subject");
+//
+//            String msg = "This is my first email using JavaMailer";
+//
+//            MimeBodyPart mimeBodyPart = new MimeBodyPart();
+//            mimeBodyPart.setContent(msg, "text/html");
+//
+//            Multipart multipart = new MimeMultipart();
+//            multipart.addBodyPart(mimeBodyPart);
+//
+//            message.setContent(multipart);
+//
+//            Transport t = session.getTransport("smtp");
+//
+//            t.connect();
+//
+//            t.sendMessage(message, message.getAllRecipients());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -90,8 +162,7 @@ public class AccountService {
         blueprint.setPasswordHash(hash(blueprint.getPassword()));
         blueprint.setPassword(null);
         blueprint.setToken(UUID.randomUUID().toString());
-        blueprint.setClearanceLevel(accountRepository.findAll().isEmpty()?
-                Account.CLEARANCE_LEVEL_ADMIN : Account.CLEARANCE_LEVEL_CUSTOMER);
+        blueprint.setClearanceLevel(Account.CLEARANCE_LEVEL_CUSTOMER);
 
         // TODO verify account by email (requires additional attribute verificationToken, REST interface and mail sender)
 
@@ -140,39 +211,39 @@ public class AccountService {
         Account account = accountRepository.getById(id);
 
         // first check all modifications
-        if (blueprint.getEmail() != null) {
+        if (blueprint.getEmail() != null && !blueprint.getEmail().equals(account.getEmail())) {
             checkEmailFormat(blueprint.getEmail());
             checkEmailUniqueness(blueprint.getEmail());
         }
-        if (blueprint.getPassword() != null) {
+        if (blueprint.getPassword() != null && !blueprint.getPassword().equals(account.getPassword())) {
             checkPasswordFormat(blueprint.getPassword());
         }
-        if (blueprint.getAddress() != null) {
+        if (blueprint.getAddress() != null && !blueprint.getAddress().equals(account.getAddress())) {
             blueprint.setAddress(checkAddressFormat(blueprint.getAddress()));
         }
-        if (blueprint.getPhoneNumber() != null) {
+        if (blueprint.getPhoneNumber() != null && !blueprint.getPhoneNumber().equals(account.getPhoneNumber())) {
             blueprint.setPhoneNumber(checkPhoneNumberFormat(blueprint.getPhoneNumber()));
         }
-        if (blueprint.getClearanceLevel() != null) {
+        if (blueprint.getClearanceLevel() != null && !blueprint.getClearanceLevel().equals(account.getClearanceLevel())) {
             if (account.getClearanceLevel() >= Account.CLEARANCE_LEVEL_ADMIN
                     && blueprint.getClearanceLevel() < Account.CLEARANCE_LEVEL_ADMIN)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "cannot degrade an admin account");
         }
 
         // if all modifications are valid, perform the updates
-        if (blueprint.getEmail() != null) {
+        if (blueprint.getEmail() != null && !blueprint.getEmail().equals(account.getEmail())) {
             account.setEmail(blueprint.getEmail());
         }
-        if (blueprint.getPassword() != null) {
+        if (blueprint.getPassword() != null && !blueprint.getPassword().equals(account.getPassword())) {
             account.setPasswordHash(hash(blueprint.getPassword()));
         }
-        if (blueprint.getAddress() != null) {
+        if (blueprint.getAddress() != null && !blueprint.getAddress().equals(account.getAddress())) {
             account.setAddress(blueprint.getAddress());
         }
-        if (blueprint.getPhoneNumber() != null) {
+        if (blueprint.getPhoneNumber() != null && !blueprint.getPhoneNumber().equals(account.getPhoneNumber())) {
             account.setPhoneNumber(blueprint.getPhoneNumber());
         }
-        if (remote && blueprint.getClearanceLevel() != null) {
+        if (remote && blueprint.getClearanceLevel() != null && !blueprint.getClearanceLevel().equals(account.getClearanceLevel())) {
             account.setClearanceLevel(blueprint.getClearanceLevel());
         }
         accountRepository.flush();

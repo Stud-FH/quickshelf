@@ -68,7 +68,7 @@ public class OrderController {
 
     /**
      * fetches all orders from the database.
-     * exclusive to employees.
+     * only employees can fetch other users' orders.
      * can filter by:
      * - status
      * - customerId
@@ -87,7 +87,9 @@ public class OrderController {
             @RequestParam("status") Optional<OrderStatus> status,
             @RequestParam("customerId") Optional<Long> customerId
     ) {
-        Account requester = accountService.authenticateAccount(accountId, token, Account.CLEARANCE_LEVEL_EMPLOYEE);
+        accountService.authenticateAccount(accountId, token,
+                (customerId.isPresent() && accountId.equals(customerId.get())?
+                        Account.CLEARANCE_LEVEL_CUSTOMER : Account.CLEARANCE_LEVEL_EMPLOYEE));
         Collection<Order> orders = orderService.getAllOrders();
         Collection<OrderDTO> list = orders.stream().map(DTOMapper.INSTANCE::convertEntityToOrderDTO).collect(Collectors.toList());
         if (status.isPresent()) list = list.stream().filter(e -> e.getStatus() == status.get()).collect(Collectors.toList());
