@@ -1,13 +1,13 @@
-package fh.server;
+package ch.bookoflies.qsserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PizzaShopApplicationTests {
+class QsServerApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
