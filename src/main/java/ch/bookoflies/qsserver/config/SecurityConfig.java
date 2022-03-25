@@ -15,8 +15,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        // localhost:8080/oauth2/authorization/google
-
         http.authorizeRequests()
                 .antMatchers("/", "/login", "/register", "/oauth/**", "/h2/**").permitAll()
                 .anyRequest().authenticated()
@@ -28,9 +26,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userService(authenticationService)
                 .and()
                 .successHandler((request, response, authentication) -> {
-                    authenticationService.processOAuthPostLogin(request.getUserPrincipal());
 
-                    response.sendRedirect("/profile");
+                    DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
+                    authenticationService.processOAuthPostLogin(oauthUser);
+
+                    response.sendRedirect("/dashboard");
                 });
 
         http.csrf().disable();

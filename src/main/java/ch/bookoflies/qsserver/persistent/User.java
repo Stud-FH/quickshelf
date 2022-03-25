@@ -3,8 +3,7 @@ package ch.bookoflies.qsserver.persistent;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -15,18 +14,23 @@ public class User {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String name;
 
     @ElementCollection
     private final Set<String> authenticationIdentities = new HashSet<>();
 
-//    @Column(unique = true, nullable = false)
-//    private String email; // used for identification in login
+    @ManyToMany
+    private final Set<Library> subscribedLibraries = new HashSet<>();
 
-    @Column(nullable = false)
-    private String token;
+    @ManyToMany
+    private final Set<Article> subscribedArticles = new HashSet<>();
 
+//    @ManyToMany
+//    private final List<Article> viewHistory = new ArrayList<>();
+
+    @ElementCollection
+    private final Map<String, String> attributes = new HashMap<>();
 
     public String getId() {
         return id;
@@ -48,19 +52,4 @@ public class User {
         authenticationIdentities.add(identity);
     }
 
-    //    public String getEmail() {
-//        return email;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }

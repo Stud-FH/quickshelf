@@ -33,7 +33,7 @@ public class UserService {
     public User createUser(User blueprint) {
         blueprint.setId(null);
 
-        blueprint.setToken(UUID.randomUUID().toString());
+        checkName(blueprint);
 
         User user = userRepository.saveAndFlush(blueprint);
         logUserActivity(user, "created");
@@ -81,6 +81,14 @@ public class UserService {
         userRepository.deleteById(id);
         userRepository.flush();
         logUserActivity(user, "deleted");
+    }
+
+    private void checkName(User user) {
+        String name = user.getName();
+        if (name == null) {
+            user.setName(UUID.randomUUID().toString()); // TODO create random name
+        } else if (userRepository.existsByName(name))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "name already exists");
     }
 
     private void logUserActivity(User user, String activity) {

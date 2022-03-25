@@ -1,23 +1,19 @@
 package ch.bookoflies.qsserver.rest.dto;
 
-public class UserDTO {
+import java.util.*;
 
-    private String id;
+public class UserDTO {
 
     private String name;
 
-    private String email;
+    private  Set<String> authenticationIdentities = new HashSet<>();
 
-    private String token;
+    private Set<String> subscribedLibraries = new HashSet<>();
 
+    private Set<String> subscribedArticles = new HashSet<>();
 
-    public String getId() {
-        return id;
-    }
+    private Map<String, String> attributes = new HashMap<>();
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -27,19 +23,35 @@ public class UserDTO {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public Set<String> getAuthenticationIdentities() {
+        return authenticationIdentities;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAuthenticationIdentities(Set<String> authenticationIdentities) {
+        this.authenticationIdentities = authenticationIdentities;
     }
 
-    public String getToken() {
-        return token;
+    public Set<String> getSubscribedLibraries() {
+        return subscribedLibraries;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setSubscribedLibraries(Set<String> subscribedLibraries) {
+        this.subscribedLibraries = subscribedLibraries;
+    }
+
+    public Set<String> getSubscribedArticles() {
+        return subscribedArticles;
+    }
+
+    public void setSubscribedArticles(Set<String> subscribedArticles) {
+        this.subscribedArticles = subscribedArticles;
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
     }
 }

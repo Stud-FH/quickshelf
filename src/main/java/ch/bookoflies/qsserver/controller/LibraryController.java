@@ -17,7 +17,10 @@ public class LibraryController {
     private final AuthenticationService authenticationService;
     private final LibraryService libraryService;
 
-    LibraryController(AuthenticationService authenticationService, LibraryService libraryService) {
+    LibraryController(
+            AuthenticationService authenticationService,
+            LibraryService libraryService
+    ) {
         this.authenticationService = authenticationService;
         this.libraryService = libraryService;
     }
@@ -37,7 +40,7 @@ public class LibraryController {
             @RequestBody LibraryDTO libraryDTO
     ) {
         Library blueprint = DTOMapper.INSTANCE.convertLibraryDTOtoEntity(libraryDTO);
-        User user = authenticationService.getUser(principal);
+        User user = authenticationService.findUser(principal);
         Library created = libraryService.createLibrary(blueprint, user);
         return DTOMapper.INSTANCE.convertEntityToLibraryDTO(created);
     }
@@ -52,7 +55,7 @@ public class LibraryController {
             Principal principal
     ) {
         Library blueprint = new Library();
-        User user = authenticationService.getUser(principal);
+        User user = authenticationService.findUser(principal);
         Library created = libraryService.createLibrary(blueprint, user);
         return DTOMapper.INSTANCE.convertEntityToLibraryDTO(created);
     }

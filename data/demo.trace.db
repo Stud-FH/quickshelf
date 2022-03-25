@@ -1,0 +1,18 @@
+2022-03-25 14:49:26 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE STRINGSET_VALUES (STRINGSET_ID VARCHAR(255) NOT NULL, VALUES[*] VARCHAR(255))"; expected "identifier"; SQL statement:
+create table stringset_values (stringset_id varchar(255) not null, values varchar(255)) [42001-200]
+2022-03-25 14:49:26 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "STRINGSET_VALUES" not found; SQL statement:
+alter table stringset_values add constraint FKeupgk1j2ck589n2l3m3d61rf9 foreign key (stringset_id) references stringset [42102-200]
+2022-03-25 15:59:27 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE STRINGSET_VALUES (STRINGSET_ID VARCHAR(255) NOT NULL, VALUES[*] VARCHAR(255))"; expected "identifier"; SQL statement:
+create table stringset_values (stringset_id varchar(255) not null, values varchar(255)) [42001-200]
+2022-03-25 15:59:27 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "STRINGSET_VALUES" not found; SQL statement:
+alter table stringset_values add constraint FKeupgk1j2ck589n2l3m3d61rf9 foreign key (stringset_id) references stringset [42102-200]
+2022-03-25 17:44:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE STRINGSET_VALUES (STRINGSET_ID VARCHAR(255) NOT NULL, VALUES[*] VARCHAR(255))"; expected "identifier"; SQL statement:
+create table stringset_values (stringset_id varchar(255) not null, values varchar(255)) [42001-200]
+2022-03-25 17:44:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "STRINGSET_VALUES" not found; SQL statement:
+alter table stringset_values add constraint FKeupgk1j2ck589n2l3m3d61rf9 foreign key (stringset_id) references stringset [42102-200]

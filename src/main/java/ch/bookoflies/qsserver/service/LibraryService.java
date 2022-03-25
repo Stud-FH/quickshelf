@@ -39,8 +39,13 @@ public class LibraryService {
         blueprint.setId(null);
         blueprint.setOwner(creator);
         Library created = libraryRepository.saveAndFlush(blueprint);
+        logUserActivity(creator, "created a library:");
         logLibraryActivity(created, "created");
         return created;
+    }
+
+    private void logUserActivity(User user, String activity) {
+        LOGGER.info(String.format("%s(%s): %s.", user.getId(), user.getName(), activity));
     }
 
     private void logLibraryActivity(Library library, String activity) {

@@ -20,10 +20,7 @@ public interface DTOMapper {
     @Mapping(source = "token", target = "token")
     User convertUserDTOtoEntity(UserDTO userDTO);
 
-    @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
-    @Mapping(source = "password", target = "password")
-    @Mapping(source = "token", target = "token")
     UserDTO convertEntityToUserDTO(User user);
 
     Library convertLibraryDTOtoEntity(LibraryDTO libraryDTO);

@@ -17,7 +17,7 @@ public class Library implements AccessScope {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,11 +33,10 @@ public class Library implements AccessScope {
     private final Map<String, Stringset> rolePermissions = new HashMap<>();
 
     @OneToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "library_roles_mapping",
-//            joinColumns = {@JoinColumn(name = "library_id", referencedColumnName = "id")},
-//            inverseJoinColumns = {@JoinColumn(name = "roles_id", referencedColumnName = "id")})
-//    @MapKeyJoinColumn(name = "user_id")
     private final Map<User, Stringset> userRoles = new HashMap<>();
+
+    @ElementCollection
+    private final Map<User, String> userAliases = new HashMap<>();
 
     public String getId() {
         return id;

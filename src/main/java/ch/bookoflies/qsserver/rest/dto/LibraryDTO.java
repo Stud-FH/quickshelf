@@ -1,19 +1,22 @@
 package ch.bookoflies.qsserver.rest.dto;
 
-public class LibraryDTO {
+import ch.bookoflies.qsserver.persistent.Stringset;
+import ch.bookoflies.qsserver.persistent.User;
 
-    private String id;
+import java.util.Map;
+import java.util.Set;
+
+public class LibraryDTO {
 
     private String name;
 
+    private String ownerName;
 
-    public String getId() {
-        return id;
-    }
+    private Set<String> articleNames;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    private Map<String, Set<String>> rolePermissions;
+
+    private Map<User, Stringset> userRoles;
 
     public String getName() {
         return name;

@@ -4,22 +4,18 @@ import ch.bookoflies.qsserver.persistent.LocalLogin;
 import ch.bookoflies.qsserver.persistent.User;
 import ch.bookoflies.qsserver.repository.LocalLoginRepository;
 import ch.bookoflies.qsserver.repository.UserRepository;
-import ch.bookoflies.qsserver.util.CustomOAuth2User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.UUID;
 
 @Service
 public class AuthenticationService extends DefaultOAuth2UserService {
@@ -35,79 +31,34 @@ public class AuthenticationService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
     private final LocalLoginRepository localLoginRepository;
 
+    private final UserService userService;
+
     public AuthenticationService(
             @Qualifier("userRepository") UserRepository userRepository,
-            @Qualifier("localLoginRepository") LocalLoginRepository localLoginRepository
+            @Qualifier("localLoginRepository") LocalLoginRepository localLoginRepository,
+            UserService userService
     ) {
         this.userRepository = userRepository;
         this.localLoginRepository = localLoginRepository;
-    }
-
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User user =  super.loadUser(userRequest);
-        return new CustomOAuth2User(user); // TODO try without
+        this.userService = userService;
     }
 
 
-    public User getUser(Principal principal) {
-        System.out.println(principal.getName());
+    public User findUser(Principal principal) {
         return userRepository.findByAuthenticationIdentitiesContains(principal.getName());
     }
 
 
-    public void processOAuthPostLogin(Principal principal) {
+    public void processOAuthPostLogin(AuthenticatedPrincipal principal) {
         String name = principal.getName();
-        User user = userRepository.findByName(name).orElse(null);
+        User user = userRepository.findByAuthenticationIdentitiesContains(name);
 
         if (user == null) {
             user = new User();
             user.addAuthenticationIdentity(name);
-            user = createUser(user);
+            user = userService.createUser(user);
         }
-        logUserActivity(user, "logged in in via oauth2");
-        LOGGER.info(user.getToken()); // TODO debugging
-    }
-
-    /**
-     * verifies a user id by the corresponding token.
-     * The admin token will verify any user id.
-     * @param id the user id that is tried to access
-     * @param token the verification token
-     * @return the user corresponding to the given id
-     * @throws ResponseStatusException
-     *      404 if no user with this id exists;
-     *      401 if token does not match the user and is not the admin token;
-     */
-    public User authenticateUser(String id, String token) {
-
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "invalid user id"));
-
-        if (!user.getToken().equals(token))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "invalid token");
-
-        return user;
-    }
-
-    /**
-     * creates a user
-     * @param blueprint a blueprint of the user to create
-     * @return the new user
-     * @throws ResponseStatusException if any attribute violates any security- or integrity constraints.
-     */
-    public User createUser(User blueprint) {
-        blueprint.setId(null);
-//        checkEmailFormat(blueprint.getEmail());
-//        checkEmailUniqueness(blueprint.getEmail());
-
-        blueprint.setToken(UUID.randomUUID().toString());
-
-        // TODO verify user by email (requires additional attribute verificationToken, REST interface and mail sender)
-
-        User user = userRepository.saveAndFlush(blueprint);
-        logUserActivity(user, "created");
-        return user;
+        logUserActivity(user, "logged in in via oauth2 as "+name);
     }
 
     /**
