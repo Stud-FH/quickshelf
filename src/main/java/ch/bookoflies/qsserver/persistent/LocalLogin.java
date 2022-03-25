@@ -16,11 +16,8 @@ public class LocalLogin {
     @OneToOne()
     private User user;
 
-    @Transient
-    private transient String password; // not saved in DB
-
     @Column(nullable = false)
-    private Long passwordHash; // saved in DB instead of password
+    private String passwordEncoding;
 
     public String getId() {
         return id;
@@ -38,19 +35,11 @@ public class LocalLogin {
         this.user = user;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordEncoding() {
+        return passwordEncoding;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Long getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(Long passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPasswordEncoding(String passwordEncoding) {
+        this.passwordEncoding = passwordEncoding;
     }
 }

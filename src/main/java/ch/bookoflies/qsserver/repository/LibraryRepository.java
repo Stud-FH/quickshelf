@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository("libraryRepository")
 public interface LibraryRepository extends JpaRepository<Library, String> {
 
-    @Query("SELECT u FROM User u WHERE u.name = :name")
+    @Query("SELECT l FROM Library l WHERE l.name = :name")
     Optional<Library> findByName(String name);
 }

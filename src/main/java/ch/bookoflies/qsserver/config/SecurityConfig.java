@@ -1,18 +1,13 @@
 package ch.bookoflies.qsserver.config;
 
-import ch.bookoflies.qsserver.service.UserService;
+import ch.bookoflies.qsserver.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.security.Principal;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -30,20 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.oauth2Login()
                 .loginPage("/login")
                 .userInfoEndpoint()
-                .userService(userService)
+                .userService(authenticationService)
                 .and()
-                .successHandler(new AuthenticationSuccessHandler() {
+                .successHandler((request, response, authentication) -> {
+                    authenticationService.processOAuthPostLogin(request.getUserPrincipal());
 
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                                        Authentication authentication) throws IOException, ServletException {
-
-                        DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
-                        String email = oauthUser.getAttribute("email");
-                        userService.processOAuthPostLogin(email);
-
-                        response.sendRedirect("/list");
-                    }
+                    response.sendRedirect("/profile");
                 });
 
         http.csrf().disable();
@@ -51,5 +38,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    private UserService userService;
+    private AuthenticationService authenticationService;
 }

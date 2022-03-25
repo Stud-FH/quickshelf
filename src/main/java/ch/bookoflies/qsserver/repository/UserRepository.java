@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query("SELECT u FROM User u WHERE u.name = :name")
     Optional<User> findByName(String name);
+
+    User findByAuthenticationIdentitiesContains(String identity);
 }

@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class CustomOAuth2User implements OAuth2User {
 
+    // TODO delete class?
+
     private OAuth2User oauth2User;
 
     public CustomOAuth2User(OAuth2User oauth2User) {

@@ -3,6 +3,8 @@ package ch.bookoflies.qsserver.persistent;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -11,16 +13,19 @@ public class User {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id; // used for most identification procedures
+    private String id;
 
-    @Column(unique = true, nullable = false)
+    @Column
     private String name;
+
+    @ElementCollection
+    private final Set<String> authenticationIdentities = new HashSet<>();
 
 //    @Column(unique = true, nullable = false)
 //    private String email; // used for identification in login
 
     @Column(nullable = false)
-    private String token; // used to verify an account. Refreshed with each login.
+    private String token;
 
 
     public String getId() {
@@ -37,6 +42,10 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void addAuthenticationIdentity(String identity) {
+        authenticationIdentities.add(identity);
     }
 
     //    public String getEmail() {

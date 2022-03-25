@@ -1,6 +1,8 @@
 package ch.bookoflies.qsserver.rest.mapper;
 
+import ch.bookoflies.qsserver.persistent.Library;
 import ch.bookoflies.qsserver.persistent.User;
+import ch.bookoflies.qsserver.rest.dto.LibraryDTO;
 import ch.bookoflies.qsserver.rest.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,5 +24,8 @@ public interface DTOMapper {
     @Mapping(source = "name", target = "name")
     @Mapping(source = "password", target = "password")
     @Mapping(source = "token", target = "token")
-    UserDTO convertEntityToUserDTO(User created);
+    UserDTO convertEntityToUserDTO(User user);
+
+    Library convertLibraryDTOtoEntity(LibraryDTO libraryDTO);
+    LibraryDTO convertEntityToLibraryDTO(Library library);
 }
