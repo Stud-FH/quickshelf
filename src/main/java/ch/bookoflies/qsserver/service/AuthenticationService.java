@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.UUID;
 
 @Service
 public class AuthenticationService extends DefaultOAuth2UserService {
@@ -43,22 +44,35 @@ public class AuthenticationService extends DefaultOAuth2UserService {
         this.userService = userService;
     }
 
-
     public User findUser(Principal principal) {
-        return userRepository.findByAuthenticationIdentitiesContains(principal.getName());
+        return userRepository.findByAuthenticationIdentitiesContains(principal.getName()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "unknown authentication id"));
     }
-
 
     public void processOAuthPostLogin(AuthenticatedPrincipal principal) {
         String name = principal.getName();
-        User user = userRepository.findByAuthenticationIdentitiesContains(name);
+        User user = userRepository.findByAuthenticationIdentitiesContains(name).orElse(null);
 
         if (user == null) {
             user = new User();
             user.addAuthenticationIdentity(name);
             user = userService.createUser(user);
         }
+        enableToken(user);
         logUserActivity(user, "logged in in via oauth2 as "+name);
+    }
+
+    public User register(LocalLogin blueprint) {
+
+        String id = blueprint.getId();
+        checkAuthenticationIdentityAvailability(id);
+
+        User user = new User();
+        user.addAuthenticationIdentity(id);
+        user = userService.createUser(user);
+        createLocalLogin(user, blueprint.getPassword());
+        enableToken(user);
+        return user;
     }
 
     /**
@@ -70,8 +84,9 @@ public class AuthenticationService extends DefaultOAuth2UserService {
      */
     public LocalLogin createLocalLogin(User user, String password) {
         LocalLogin localLogin = new LocalLogin();
+        localLogin.setId(user.getId());
         localLogin.setUser(user);
-        localLogin.setPasswordEncoding(passwordEncoder.encode(password));
+        localLogin.setPasswordEncoded(passwordEncoder.encode(password));
 
         localLogin = localLoginRepository.saveAndFlush(localLogin);
         logUserActivity(user, "created a local login");
@@ -86,16 +101,37 @@ public class AuthenticationService extends DefaultOAuth2UserService {
      *      404 if no user with this name exists;
      *      401 if the password is wrong;
      */
-    public User processLocalLogin(String username, String password) {
-        User user = userRepository.findByName(username).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "unknown user name"));
-        LocalLogin localLogin = localLoginRepository.findByUser(user).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "no local login registered for this user"));
-        if (!passwordEncoder.matches(password, localLogin.getPasswordEncoding()))
+    public User processLocalLogin(LocalLogin localLogin) {
+        LocalLogin model = localLoginRepository.findById(localLogin.getId()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "unknown authentication id"));
+        if (!passwordEncoder.matches(localLogin.getPassword(), model.getPasswordEncoded()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "wrong password");
-
+        User user = model.getUser();
+        enableToken(user);
         logUserActivity(user, "logged in via local login");
         return user;
+    }
+
+    public void logout(String token) {
+        User user = userRepository.findByToken(token).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "invalid token"));
+        disableToken(user);
+        logUserActivity(user, "logged out");
+    }
+
+    public void checkAuthenticationIdentityAvailability(String id) {
+        if (userRepository.existsByAuthenticationIdentitiesContains(id))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "user with this id already exists");
+    }
+
+    private void enableToken(User user) {
+        if (user.getToken() == null) user.setToken(UUID.randomUUID().toString());
+        userRepository.flush();
+    }
+
+    private void disableToken(User user) {
+        user.setToken(null);
+        userRepository.flush();
     }
 
     private void logUserActivity(User user, String activity) {

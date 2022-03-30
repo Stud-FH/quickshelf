@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository("localLoginRepository")
 public interface LocalLoginRepository extends JpaRepository<LocalLogin, String> {
 
-    Optional<LocalLogin> findByUser(User user);
+    Optional<LocalLogin> findById(String id);
 }

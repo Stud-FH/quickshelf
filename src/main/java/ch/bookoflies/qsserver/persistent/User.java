@@ -17,6 +17,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(nullable = true, unique = true) //TODO nullable unique?
+    private String token;
+
     @ElementCollection
     private final Set<String> authenticationIdentities = new HashSet<>();
 
@@ -46,6 +49,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void addAuthenticationIdentity(String identity) {

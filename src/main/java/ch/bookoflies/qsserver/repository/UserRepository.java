@@ -16,5 +16,9 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByName(String name);
 
     @Query("select u from User u join u.authenticationIdentities a where a = ?1")
-    User findByAuthenticationIdentitiesContains(String identity);
+    Optional<User> findByAuthenticationIdentitiesContains(String id);
+
+    Optional<User> findByToken(String token);
+
+    boolean existsByAuthenticationIdentitiesContains(String id);
 }

@@ -1,7 +1,5 @@
 package ch.bookoflies.qsserver.persistent;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 
 @Entity
@@ -9,15 +7,16 @@ import javax.persistence.*;
 public class LocalLogin {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id; // used for most identification procedures
+    private String id;
 
-    @OneToOne()
+    @OneToOne(optional = false)
     private User user;
 
+    @Transient
+    private String password;
+
     @Column(nullable = false)
-    private String passwordEncoding;
+    private String passwordEncoded;
 
     public String getId() {
         return id;
@@ -35,11 +34,19 @@ public class LocalLogin {
         this.user = user;
     }
 
-    public String getPasswordEncoding() {
-        return passwordEncoding;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordEncoding(String passwordEncoding) {
-        this.passwordEncoding = passwordEncoding;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPasswordEncoded() {
+        return passwordEncoded;
+    }
+
+    public void setPasswordEncoded(String passwordEncoding) {
+        this.passwordEncoded = passwordEncoding;
     }
 }

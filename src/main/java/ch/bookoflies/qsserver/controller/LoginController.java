@@ -1,5 +1,12 @@
 package ch.bookoflies.qsserver.controller;
 
+import ch.bookoflies.qsserver.persistent.LocalLogin;
+import ch.bookoflies.qsserver.persistent.User;
+import ch.bookoflies.qsserver.rest.dto.LibraryDTO;
+import ch.bookoflies.qsserver.rest.dto.LoginDTO;
+import ch.bookoflies.qsserver.rest.dto.UserDTO;
+import ch.bookoflies.qsserver.rest.mapper.DTOMapper;
+import ch.bookoflies.qsserver.service.AuthenticationService;
 import ch.bookoflies.qsserver.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -7,46 +14,43 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class LoginController {
 
-    private final UserService userService;
+    private final AuthenticationService authenticationService;
 
-    LoginController(UserService userService) {
-        this.userService = userService;
+    LoginController(
+            AuthenticationService authenticationService
+            ) {
+        this.authenticationService = authenticationService;
     }
 
 
-    @GetMapping("/register")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public String register( // TODO improve local login
+    public UserDTO register(
+            @RequestBody LoginDTO data
     ) {
-        return "<div>\n" +
-                "    <h2>Please Login</h2>\n" +
-                "    <br/>\n" +
-                "</div>\n" +
-                "<div>\n" +
-                "    <h4><a th:href=\"/@{/oauth2/authorization/google}\">Login with Google</a></h4>   \n" +
-                "</div>\n" +
-                "<div><p>OR</p></div>\n" +
-                "     \n" +
-                "<form th:action=\"@{/login}\" method=\"post\" style=\"max-width: 400px; margin: 0 auto;\">\n" +
-                "<div class=\"border border-secondary rounded p-3\">\n" +
-                "    <div th:if=\"${param.error}\">\n" +
-                "        <p class=\"text-danger\">Invalid username or password.</p>\n" +
-                "    </div>\n" +
-                "    <div th:if=\"${param.logout}\">\n" +
-                "        <p class=\"text-warning\">You have been logged out.</p>\n" +
-                "    </div>\n" +
-                "    <div>\n" +
-                "        <p><input type=\"email\" name=\"email\" required class=\"form-control\" placeholder=\"E-mail\" /></p>\n" +
-                "    </div>\n" +
-                "    <div>\n" +
-                "        <p><input type=\"password\" name=\"pass\" required class=\"form-control\" placeholder=\"Password\" /></p>\n" +
-                "    </div>\n" +
-                "    <div>\n" +
-                "        <p><input type=\"submit\" value=\"Login\" class=\"btn btn-primary\" /></p>\n" +
-                "    </div>\n" +
-                "</div>\n" +
-                "</form>";
+        LocalLogin login = DTOMapper.INSTANCE.convertLoginDTOtoEntity(data);
+        User user = authenticationService.register(login);
+        return DTOMapper.INSTANCE.convertEntityToUserDTO(user);
+    }
+
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public UserDTO localLogin(
+            @RequestBody LoginDTO data
+    ) {
+        LocalLogin login = DTOMapper.INSTANCE.convertLoginDTOtoEntity(data);
+        User user = authenticationService.processLocalLogin(login);
+        return DTOMapper.INSTANCE.convertEntityToUserDTO(user);
+    }
+
+    @DeleteMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(
+            @RequestHeader("token") String token
+    ) {
+        authenticationService.logout(token);
     }
     
 }
