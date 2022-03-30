@@ -29,9 +29,6 @@ public class User {
     @ManyToMany
     private final Set<Article> subscribedArticles = new HashSet<>();
 
-//    @ManyToMany
-//    private final List<Article> viewHistory = new ArrayList<>();
-
     @ElementCollection
     private final Map<String, String> attributes = new HashMap<>();
 
